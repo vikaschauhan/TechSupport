@@ -1,7 +1,6 @@
 package in.infocruise.techsupport;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,14 +8,19 @@ import android.os.Bundle;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import in.infocruise.techsupport.Model.Call_Log;
+import in.infocruise.techsupport.Model.TicketDetail;
 import in.infocruise.techsupport.helper.SQLiteHandler;
 
 
@@ -29,6 +33,13 @@ import in.infocruise.techsupport.helper.SQLiteHandler;
  * create an instance of this fragment.
  */
 public class CallLogsFragment extends Fragment {
+    private static final String TAG = DashboardActivity.class.getSimpleName();
+    private RecyclerView mRecyclerView;
+    private LogAdapter mLogAdapter = null;
+    private ArrayList<Call_Log> mExampleList;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+
     TextView call = null;
     private SQLiteHandler db;
 
@@ -81,7 +92,17 @@ public class CallLogsFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_call_logs, container, false);
 
-        call = rootView.findViewById(R.id.call);
+        mRecyclerView = rootView.findViewById(R.id.recycler_view);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mLogAdapter);
+        mRecyclerView.setHasFixedSize(true);
+
+        mExampleList = new ArrayList<>();
+
+        //getData();
+
+        //call = rootView.findViewById(R.id.call);
         getCallDetails();
         return rootView;
     }
@@ -139,24 +160,24 @@ public class CallLogsFragment extends Fragment {
         }
         Cursor managedCursor = getContext().getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, null);
         assert managedCursor != null;
-        int number = managedCursor.getColumnIndex( CallLog.Calls.NUMBER );
-        int type = managedCursor.getColumnIndex( CallLog.Calls.TYPE );
-        int date = managedCursor.getColumnIndex( CallLog.Calls.DATE);
-        int duration = managedCursor.getColumnIndex( CallLog.Calls.DURATION);
+        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+        int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
+        int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
+        int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
         int name = managedCursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
-        sb.append( "Call Details :");
+        sb.append("Call Details :");
 
-        while ( managedCursor.moveToNext() ) {
+        while (managedCursor.moveToNext()) {
 
-            String phNumber = managedCursor.getString( number );
+            String phNumber = managedCursor.getString(number);
             String phName = managedCursor.getString(name);
-            String callType = managedCursor.getString( type );
-            String callDate = managedCursor.getString( date );
+            String callType = managedCursor.getString(type);
+            String callDate = managedCursor.getString(date);
             Date callDayTime = new Date(Long.valueOf(callDate));
-            String callDuration = managedCursor.getString( duration );
+            String callDuration = managedCursor.getString(duration);
             String dir = null;
-            int dircode = Integer.parseInt( callType );
-            switch( dircode ) {
+            int dircode = Integer.parseInt(callType);
+            switch (dircode) {
                 case CallLog.Calls.OUTGOING_TYPE:
                     dir = "OUTGOING";
                     break;
@@ -168,13 +189,20 @@ public class CallLogsFragment extends Fragment {
                     dir = "MISSED";
                     break;
             }
-            Call_Log call_log = new Call_Log(phName,phNumber ,callType,String.valueOf(callDayTime));
+            mExampleList.add(new Call_Log(phName,phNumber, dir, callDate));
+            Log.d(TAG,"reached here: " + phName);
+            Call_Log call_log = new Call_Log(phName, phNumber, callType, String.valueOf(callDayTime));
             db.create_call_log(call_log);
             db.closeDB();
-            sb.append( "\n Name:- "+phName+" \nPhone Number:--- "+phNumber +" \nCall Type:--- "+dir+" \nCall Date:--- "+callDayTime+" \nCall duration in sec :--- "+callDuration );
-            sb.append("\n----------------------------------");
+
+
+           // sb.append("\n Name:- " + phName + " \nPhone Number:--- " + phNumber + " \nCall Type:--- " + dir + " \nCall Date:--- " + callDayTime + " \nCall duration in sec :--- " + callDuration);
+           // sb.append("\n----------------------------------");
         }
+
         managedCursor.close();
-        call.setText(sb);
+        mLogAdapter = new LogAdapter(getContext(), mExampleList);
+        mRecyclerView.setAdapter(mLogAdapter);
+        //call.setText(sb);
     }
 }

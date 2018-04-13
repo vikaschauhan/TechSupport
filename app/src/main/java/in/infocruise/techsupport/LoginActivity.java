@@ -4,10 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneStateListener;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +30,7 @@ import java.util.Objects;
 
 import in.infocruise.techsupport.Model.User;
 import in.infocruise.techsupport.helper.MySingleton;
+import in.infocruise.techsupport.helper.PhoneCallStateReceiver;
 import in.infocruise.techsupport.helper.SQLiteHandler;
 import in.infocruise.techsupport.helper.SessionManager;
 
@@ -35,6 +38,7 @@ import in.infocruise.techsupport.helper.SessionManager;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
+
 
     /**
      * login url for login verification to get username and password.
@@ -61,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
 
         // Set up the login form.
         mNameInput =  findViewById(R.id.username_input);
