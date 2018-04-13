@@ -150,7 +150,7 @@ public class OpenTicketFragment extends Fragment {
     private void getData() {
 
 
-        String url = "http://192.168.1.240:84/service.asmx/ticketMaster?";
+        String url = "http://202.83.19.113:84/service.asmx/ticketMaster?";
         Log.d(TAG, "url now is: " + url);
         JsonArrayRequest request = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {

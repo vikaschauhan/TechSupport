@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * login url for login verification to get username and password.
      */
-    private String login_url = "http://192.168.1.240:84/service.asmx/VerifyLogin?";
+    private String login_url = "http://202.83.19.113:84/service.asmx/VerifyLogin?";
     // log statement label
     private static final String TAG = LoginActivity.class.getSimpleName();
     // declaring Session Manager
@@ -87,7 +87,8 @@ public class LoginActivity extends AppCompatActivity {
             mNameInput.setText(session.getUserDetails().get("name"));
             mPasswordInput.setText(session.getUserDetails().get("password"));
 
-            new Intent(getApplicationContext(), DashboardActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+           // startActivity( new Intent(getApplicationContext(), DashboardActivity.class));
         }
 
     }
@@ -313,5 +314,7 @@ public class LoginActivity extends AppCompatActivity {
 //            showProgress(false);
 //        }
 //    }
+
+
 }
 

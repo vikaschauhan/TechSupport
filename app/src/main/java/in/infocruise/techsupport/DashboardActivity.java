@@ -230,7 +230,7 @@ public class DashboardActivity extends AppCompatActivity {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
@@ -255,6 +255,19 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-
+    long lastPress;
+    Toast backpressToast;
+    @Override
+    public void onBackPressed() {
+        long currentTime = System.currentTimeMillis();
+        if(currentTime - lastPress > 5000){
+            backpressToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_LONG);
+            backpressToast.show();
+            lastPress = currentTime;
+        } else {
+            if (backpressToast != null) backpressToast.cancel();
+            super.onBackPressed();
+        }
+    }
 
 }

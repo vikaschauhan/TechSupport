@@ -26,8 +26,10 @@ public class SessionManager {
     // All shared preference key
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
 
+
     // User name (make variable public to access from outside)
     public static final String KEY_NAME = "name";
+
 
     // Email address (make variable public to access from outside)
     public static final String KEY_PASSWORD = "password";
@@ -44,6 +46,9 @@ public class SessionManager {
     public void createUserLoginSession(String name, String password) {
         // Storing login value as TRUE
         editor.putBoolean(KEY_IS_LOGGEDIN, true);
+
+        // Storing id in pref
+
 
         // Storing name in pref
         editor.putString(KEY_NAME, name);

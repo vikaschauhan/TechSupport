@@ -273,7 +273,7 @@ public class CreateTicketActivity extends AppCompatActivity {
     private void loadSpinnerDataForDealerships(String item) {
         Log.d(TAG, "item now is : " + item);
         DealershipMaster.clear();
-        String url = "http://192.168.1.240:84/service.asmx/dealershipMaster?id=" + item;
+        String url = "http://202.83.19.113:84/service.asmx/dealershipMaster?id=" + item;
 
         Log.d(TAG, "starting to get json data: " + url);
         JsonArrayRequest request = new JsonArrayRequest(url,
@@ -323,7 +323,7 @@ public class CreateTicketActivity extends AppCompatActivity {
     }
 
     private void loadDataSpinnerForStatuTag() {
-        String url = "http://192.168.1.240:84/service.asmx/tagMaster?";
+        String url = "http://202.83.19.113:84/service.asmx/tagMaster?";
         Log.d(TAG, "URL: " + url);
         JsonArrayRequest request = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
@@ -437,7 +437,7 @@ public class CreateTicketActivity extends AppCompatActivity {
             contact_number = mContactNumber.getText().toString();
         }
         Log.d(TAG, "contact number : " + contact_number);
-        String url = "http://192.168.1.240:84/service.asmx/SaveTickets?user_id="
+        String url = "http://202.83.19.113:84/service.asmx/SaveTickets?user_id="
                 + user_id + "&contact=" + contact_number + "&dealership_id="
                 + getDealershipId + "&ticket_note=" + ticket_input + "&tag_id=" + getStatusTagId;
 
