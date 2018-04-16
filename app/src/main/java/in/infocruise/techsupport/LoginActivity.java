@@ -17,9 +17,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
@@ -39,7 +45,7 @@ import in.infocruise.techsupport.helper.SessionManager;
  */
 public class LoginActivity extends AppCompatActivity {
 
-
+    RequestQueue mRequestQueue;
     /**
      * login url for login verification to get username and password.
      */
@@ -208,6 +214,11 @@ public class LoginActivity extends AppCompatActivity {
      */
    private void verifyLogin(final String NAME, final String PASSWORD){
        login_url += "name=" + NAME + "&password=" + PASSWORD;
+       // Instantiate the cache
+       Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1); // 1MB cap
+       // Set up the network to use HttpURLConnection as the HTTP client.
+       Network network = new BasicNetwork(new HurlStack());
+
        JsonArrayRequest request = new JsonArrayRequest(login_url,
                new Response.Listener<JSONArray>() {
                    @Override
@@ -263,6 +274,7 @@ public class LoginActivity extends AppCompatActivity {
            }
        });
        // Add a request (in this example, called stringRequest) to your RequestQueue.
+
        MySingleton.getInstance(this).addToRequestQueue(request);
    }
 

@@ -428,17 +428,20 @@ public class CreateTicketActivity extends AppCompatActivity {
         String name_input = mTicketClientName.getText().toString();
         String number_input = mTicketClientNumber.getText().toString();
         String contact_number;
+        String contact_name;
         String ticket_input = mTicketDesc.getText().toString().replaceAll("[\\s]", "/s");
 
 
         if (mContactPick.isChecked()) {
             contact_number = number_input.replaceAll("[-()\\s]+", "").trim();
+            contact_name = name_input;
         } else {
             contact_number = mContactNumber.getText().toString();
+            contact_name = mContactName.getText().toString();
         }
         Log.d(TAG, "contact number : " + contact_number);
         String url = "http://202.83.19.113:84/service.asmx/SaveTickets?user_id="
-                + user_id + "&contact=" + contact_number + "&dealership_id="
+                + user_id + "&contact=" + contact_number + "&contact_name=" + contact_name + "&dealership_id="
                 + getDealershipId + "&ticket_note=" + ticket_input + "&tag_id=" + getStatusTagId;
 
         Log.d(TAG, "url now is: " + url);
